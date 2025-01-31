@@ -4,18 +4,18 @@ import torch.optim as optim
 import torch.nn.functional as F
 import os
 
-class Linear_QNet(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
+class Linear_QNet(nn.Module): #Implementa uma rede neural totalmente conectada com duas camadas.
+    def __init__(self, input_size, hidden_size, output_size):#Define a estrutura da rede neural.
         super().__init__()
         self.linear1 = nn.Linear(input_size, hidden_size)
         self.linear2 = nn.Linear(hidden_size, output_size)
 
-    def forward(self, x):
+    def forward(self, x): #Propaga os dados de entrada pela rede, aplicando a função ReLU na primeira camada.
         x = F.relu(self.linear1(x))
         x = self.linear2(x)
         return x
 
-    def save(self, file_name='model.pth'):
+    def save(self, file_name='model.pth'): #Salva o modelo treinado em um arquivo .pth.
         model_folder_path = './model'
         if not os.path.exists(model_folder_path):
             os.makedirs(model_folder_path)
@@ -24,15 +24,15 @@ class Linear_QNet(nn.Module):
         torch.save(self.state_dict(), file_name)
 
 
-class QTrainer:
-    def __init__(self, model, lr, gamma):
+class QTrainer: #Treina o modelo ajustando os pesos da rede neural.
+    def __init__(self, model, lr, gamma): 
         self.lr = lr
         self.gamma = gamma
         self.model = model
         self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
         self.criterion = nn.MSELoss()
 
-    def train_step(self, state, action, reward, next_state, done):
+    def train_step(self, state, action, reward, next_state, done): #Implementa o cálculo da função Q-learning, ajustando os pesos com base nas recompensas recebidas.
         state = torch.tensor(state, dtype=torch.float)
         next_state = torch.tensor(next_state, dtype=torch.float)
         action = torch.tensor(action, dtype=torch.long)

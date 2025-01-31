@@ -3,7 +3,7 @@ from IPython import display
 
 plt.ion()
 
-def plot(scores, mean_scores):
+def plot(scores, mean_scores): #Plota os gráficos do desempenho da IA ao longo do tempo, mostrando a pontuação e a média de pontos por jogo.
     display.clear_output(wait=True)
     display.display(plt.gcf())
     plt.clf()
